@@ -37,8 +37,42 @@ const MORSE_TABLE = {
     '-----':  '0',
 };
 
+const decoder = {
+    ['10']: '.',
+    ['11']: '-'
+};
+
 function decode(expr) {
-    // write your solution here
+    const binaryWords = expr.split('**********'); 
+    const result = [];
+
+    for (let i = 0; i < binaryWords.length; i++) { 
+        const binaryLetters = []; 
+        let word = '';
+
+        for (let k = 0; k < binaryWords[i].length; k += 10) { 
+          binaryLetters.push(binaryWords[i].slice(k, k + 10));
+        }
+
+        for (let letter of binaryLetters) {
+            let morseLetter = '';
+            for (let j = 0; j < letter.length; j += 2) {
+                let sign = letter.slice(j, j + 2);
+                if (sign in decoder) {
+                    morseLetter += decoder[sign];
+                }
+            }
+
+            for (let key in MORSE_TABLE) {
+                if (key === morseLetter) {
+                    word += MORSE_TABLE[key];
+                    break;
+                }
+            }
+        }
+        result.push(word);
+    }
+    return result.join(' ');
 }
 
 module.exports = {
